@@ -32,4 +32,9 @@ public class Applicant {
     public void setApplicantDocument(String applicantDocument) {
         this.applicantDocument = DocumentFormatter.formatCpfOrCnpj(applicantDocument);
     }
+
+    @Override
+    public String toString() {
+        return "Applicant [id= " + id + ", applicantName= " + applicantName + "]";
+    }
 }

@@ -52,4 +52,9 @@ public class Request {
     public void setDescription(String description) {
         this.description = description.toUpperCase();
     }
+
+    @Override
+    public String toString() {
+        return "Request [id= " + id + ", applicant= " + applicant.getApplicantName() + ", openingDate= " + openingDate + ", closingDate= " + closingDate + ", description= " + description + "]";
+    }
 }
