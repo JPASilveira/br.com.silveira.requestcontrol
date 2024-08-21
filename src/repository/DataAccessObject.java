@@ -150,7 +150,6 @@ public class DataAccessObject {
         }
     }
 
-    //
     public void addRequest(Request request) {
         String sql = "INSERT INTO Request (applicant_id, opening_date, closing_date, description) VALUES (?, ?, ?, ?)";
 
@@ -193,4 +192,82 @@ public class DataAccessObject {
             throw new DataAccessException("Error listing requests", e);
         }
     }
+
+    public List<Request> listRequestsByApplicantId(int applicantId) {
+        String sql = "SELECT * FROM Request WHERE applicant_id = ?";
+
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, applicantId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                List<Request> requests = new ArrayList<>();
+                while (resultSet.next()) {
+                    Applicant applicant = getApplicantById(resultSet.getInt("applicant_id"));
+                    Request request = new Request();
+                    request.setId(resultSet.getInt("id"));
+                    request.setApplicant(applicant);
+                    request.setOpeningDate(DateFormatter.sqlDateToLocalDate(resultSet.getString("opening_date")));
+                    request.setClosingDate(DateFormatter.sqlDateToLocalDate(resultSet.getString("closing_date")));
+                    request.setDescription(resultSet.getString("description"));
+                    requests.add(request);
+                }
+
+                return requests;
+
+            }
+
+        } catch (SQLException e) {
+            throw new DataAccessException("Error listing requests by applicant ID", e);
+        }
+    }
+
+    public List<Request> listRequestsByOpeningDate(String openingDate) {
+        String sql = "SELECT * FROM Request WHERE opening_date = ?";
+
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setString(1, openingDate);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()) {
+                List<Request> requests = new ArrayList<>();
+
+                while (resultSet.next()) {
+                    Applicant applicant = getApplicantById(resultSet.getInt("applicant_id"));
+                    Request request = new Request();
+                    request.setId(resultSet.getInt("id"));
+                    request.setApplicant(applicant);
+                    request.setOpeningDate(DateFormatter.sqlDateToLocalDate(resultSet.getString("opening_date")));
+                    request.setClosingDate(DateFormatter.sqlDateToLocalDate(resultSet.getString("closing_date")));
+                    request.setDescription(resultSet.getString("description"));
+                    requests.add(request);
+                }
+                return requests;
+            }
+
+        } catch (SQLException e) {
+            throw new DataAccessException("Error listing requests by opening date", e);
+        }
+    }
+
+    public void removeRequest(int requestId) {
+        String sql = "DELETE FROM Request WHERE id = ?";
+
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+
+            preparedStatement.setInt(1, requestId);
+            int affectedRows = preparedStatement.executeUpdate();
+
+            if (affectedRows == 0) {
+                throw new DataAccessException("Request not found or not deleted");
+            }
+
+        } catch (SQLException e) {
+            throw new DataAccessException("Error removing request", e);
+        }
+    }
+
 }
