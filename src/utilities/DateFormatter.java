@@ -33,4 +33,9 @@ public class DateFormatter {
             throw new IllegalArgumentException("Invalid date format: " + formattedDate, e);
         }
     }
+
+    public static String formatDate(LocalDate date) {
+        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        return date.format(pattern);
+    }
 }

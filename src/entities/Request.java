@@ -5,12 +5,21 @@ import utilities.DateFormatter;
 import java.time.LocalDate;
 
 public class Request {
+    private Integer id;
     private Applicant applicant;
     private LocalDate openingDate;
     private LocalDate closingDate;
     private String description;
 
     public Request() {}
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
+    }
 
     public Applicant getApplicant() {
         return applicant;
@@ -20,16 +29,16 @@ public class Request {
         this.applicant = applicant;
     }
 
-    public LocalDate getOpeningDate() {
-        return openingDate;
+    public String getOpeningDate() {
+        return DateFormatter.formatDate(openingDate);
     }
 
     public void setOpeningDate(String openingDate) {
         this.openingDate = DateFormatter.formatDate(openingDate);
     }
 
-    public LocalDate getClosingDate() {
-        return closingDate;
+    public String getClosingDate() {
+        return DateFormatter.formatDate(closingDate);
     }
 
     public void setClosingDate(String closingDate) {
@@ -41,6 +50,6 @@ public class Request {
     }
 
     public void setDescription(String description) {
-        this.description = description;
+        this.description = description.toUpperCase();
     }
 }
