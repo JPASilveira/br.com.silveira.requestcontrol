@@ -11,7 +11,10 @@ public class Request {
     private LocalDate closingDate;
     private String description;
 
-    public Request() {}
+    public Request() {
+        this.openingDate = DateFormatter.formatDate("00/00/0000");
+        this.closingDate = DateFormatter.formatDate("00/00/0000");
+    }
 
     public Integer getId() {
         return id;
@@ -37,12 +40,20 @@ public class Request {
         this.openingDate = DateFormatter.formatDate(openingDate);
     }
 
+    public void setOpeningDate(LocalDate openingDate) {
+        this.openingDate = openingDate;
+    }
+
     public String getClosingDate() {
         return DateFormatter.formatDate(closingDate);
     }
 
     public void setClosingDate(String closingDate) {
         this.closingDate = DateFormatter.formatDate(closingDate);
+    }
+
+    public void setClosingDate(LocalDate closingDate) {
+        this.closingDate = closingDate;
     }
 
     public String getDescription() {

@@ -38,4 +38,13 @@ public class DateFormatter {
         DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         return date.format(pattern);
     }
+
+    public static LocalDate sqlDateToLocalDate(String date) {
+        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyy-MM-dd");
+        try {
+            return LocalDate.parse(date, pattern);
+        } catch (DateTimeParseException e) {
+            throw new IllegalArgumentException("Invalid date format: " + date, e);
+        }
+    }
 }

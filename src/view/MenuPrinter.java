@@ -15,6 +15,11 @@ public class MenuPrinter {
         System.out.println("(N)ame | (D)ocument | (R)eturn");
     }
 
+    public static void listApplicantMenu(){
+        System.out.println("                  LIST                 ");
+        System.out.println("(A)ll | (N)ame | (D)ocument | (R)eturn");
+    }
+
     public static void requestMenu(){
         System.out.println("              REQUEST               ");
         System.out.println("(A)dd | (E)dit | (D)elete | (R)eturn");
@@ -29,7 +34,7 @@ public class MenuPrinter {
         System.out.println("(S)elect | (L)ist | (R)eturn");
     }
 
-    public static void listMenu(){
+    public static void listRequestMenu(){
         System.out.println("               LIST               ");
         System.out.println("(A)ll | (N)ame | (D)ate | (R)eturn");
     }
