@@ -132,6 +132,49 @@ public class DataAccessObject {
         }
     }
 
+    public void editApplicant(int requestId, Applicant applicant) throws DataAccessException {
+        StringBuilder sql = new StringBuilder("UPDATE Applicant SET ");
+        boolean hasApplicantName = false, hasApplicantDocument = false;
+        boolean isFirst = true;
+
+
+        if (applicant.getApplicantName() != null) {
+            sql.append("applicant_name = ?");
+            hasApplicantName = true;
+            isFirst = false;
+        }
+
+        if (applicant.getApplicantDocument() != null) {
+            if (!isFirst) {
+                sql.append(", ");
+            }
+            sql.append("applicant_document = ?");
+            hasApplicantDocument = true;
+        }
+
+        sql.append(" WHERE id = ?");
+
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+
+            int parameterIndex = 1;
+
+            if (hasApplicantName) {
+                preparedStatement.setString(parameterIndex++, applicant.getApplicantName());
+            }
+
+            if (hasApplicantDocument) {
+                preparedStatement.setString(parameterIndex++, applicant.getApplicantDocument());
+            }
+
+            preparedStatement.setInt(parameterIndex, requestId);
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new DataAccessException("Error updating applicant with ID: " + requestId, e);
+        }
+    }
     public void removeApplicant(int applicantId) {
         String sql = "DELETE FROM Applicant WHERE id = ?";
 
@@ -150,16 +193,36 @@ public class DataAccessObject {
         }
     }
 
-    public void addRequest(Request request) {
-        String sql = "INSERT INTO Request (applicant_id, opening_date, closing_date, description) VALUES (?, ?, ?, ?)";
+    public void addRequest(Request request) throws DataAccessException {
+        StringBuilder sql = new StringBuilder("INSERT INTO Request (applicant_id, opening_date");
+        StringBuilder values = new StringBuilder("VALUES (?, ?");
+
+        boolean hasClosingDate = request.getClosingDate() != null && !request.getClosingDate().isEmpty();
+
+        if (hasClosingDate) {
+            sql.append(", closing_date");
+            values.append(", ?");
+        }
+
+        sql.append(", description) ");
+        values.append(", ?)");
+
+        sql.append(values.toString());
 
         try (Connection connection = ConnectionFactory.getConnection();
-             PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+             PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
 
             preparedStatement.setInt(1, request.getApplicant().getId());
             preparedStatement.setString(2, request.getOpeningDate());
-            preparedStatement.setString(3, request.getClosingDate());
-            preparedStatement.setString(4, request.getDescription());
+
+            int parameterIndex = 3;
+
+            if (hasClosingDate) {
+                preparedStatement.setString(parameterIndex++, request.getClosingDate());
+            }
+
+            preparedStatement.setString(parameterIndex, request.getDescription());
+
             preparedStatement.executeUpdate();
 
         } catch (SQLException e) {
@@ -215,7 +278,6 @@ public class DataAccessObject {
                 }
 
                 return requests;
-
             }
 
         } catch (SQLException e) {
@@ -252,6 +314,64 @@ public class DataAccessObject {
         }
     }
 
+    public void editRequest(int requestId, Request request) throws DataAccessException {
+        StringBuilder sql = new StringBuilder("UPDATE Request SET ");
+        boolean isFirst = true;
+
+        if (request.getApplicant() != null) {
+            sql.append("applicant_id = ?");
+            isFirst = false;
+        }
+        if (request.getOpeningDate() != null) {
+            if (!isFirst) {
+                sql.append(", ");
+            }
+            sql.append("opening_date = ?");
+            isFirst = false;
+        }
+        if (request.getClosingDate() != null) {
+            if (!isFirst) {
+                sql.append(", ");
+            }
+            sql.append("closing_date = ?");
+            isFirst = false;
+        }
+        if (request.getDescription() != null && !request.getDescription().isEmpty()) {
+            if (!isFirst) {
+                sql.append(", ");
+            }
+            sql.append("description = ?");
+        }
+
+        sql.append(" WHERE id = ?");
+
+        try (Connection connection = ConnectionFactory.getConnection();
+             PreparedStatement preparedStatement = connection.prepareStatement(sql.toString())) {
+
+            int parameterIndex = 1;
+
+            if (request.getApplicant() != null) {
+                preparedStatement.setInt(parameterIndex++, request.getApplicant().getId());
+            }
+            if (request.getOpeningDate() != null) {
+                preparedStatement.setString(parameterIndex++, request.getOpeningDate());
+            }
+            if (request.getClosingDate() != null) {
+                preparedStatement.setString(parameterIndex++, request.getClosingDate());
+            }
+            if (request.getDescription() != null && !request.getDescription().isEmpty()) {
+                preparedStatement.setString(parameterIndex++, request.getDescription());
+            }
+
+            preparedStatement.setInt(parameterIndex, requestId);
+
+            preparedStatement.executeUpdate();
+
+        } catch (SQLException e) {
+            throw new DataAccessException("Error updating request with ID: " + requestId, e);
+        }
+    }
+
     public void removeRequest(int requestId) {
         String sql = "DELETE FROM Request WHERE id = ?";
 
@@ -269,5 +389,4 @@ public class DataAccessObject {
             throw new DataAccessException("Error removing request", e);
         }
     }
-
 }

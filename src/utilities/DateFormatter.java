@@ -40,7 +40,7 @@ public class DateFormatter {
     }
 
     public static LocalDate sqlDateToLocalDate(String date) {
-        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyy-MM-dd");
+        DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd");
         try {
             return LocalDate.parse(date, pattern);
         } catch (DateTimeParseException e) {

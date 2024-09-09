@@ -11,10 +11,7 @@ public class Request {
     private LocalDate closingDate;
     private String description;
 
-    public Request() {
-        this.openingDate = DateFormatter.formatDate("00/00/0000");
-        this.closingDate = DateFormatter.formatDate("00/00/0000");
-    }
+    public Request() {}
 
     public Integer getId() {
         return id;
@@ -45,7 +42,10 @@ public class Request {
     }
 
     public String getClosingDate() {
-        return DateFormatter.formatDate(closingDate);
+        if (this.closingDate != null){
+            return DateFormatter.formatDate(closingDate);
+        }
+        return null;
     }
 
     public void setClosingDate(String closingDate) {

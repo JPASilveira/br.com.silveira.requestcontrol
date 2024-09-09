@@ -81,4 +81,19 @@ public class ApplicantInput {
             }
         }
     }
+
+    public static int id(){
+        Scanner scanner = new Scanner(System.in);
+        int input;
+        while (true) {
+            try {
+                System.out.println("Enter id of applicant: ");
+                input = scanner.nextInt();
+                return input;
+            }catch (Exception e) {
+                System.out.println("Error reading id. Please try again.");
+                scanner.next();
+            }
+        }
+    }
 }
