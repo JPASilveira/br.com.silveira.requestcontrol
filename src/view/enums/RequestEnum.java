@@ -10,7 +10,7 @@ public enum RequestEnum {
     CLOSING,
     DESCRIPTION,
     ALL,
-    NAME,
+    ID,
     DATE,
     RETURN
 }

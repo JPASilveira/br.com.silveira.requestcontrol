@@ -314,6 +314,29 @@ public class DataAccessObject {
         }
     }
 
+    public Request getRequestById(int requestId) {
+        String sql = "SELECT * FROM Request WHERE id = ?";
+
+        try(Connection connection = ConnectionFactory.getConnection();
+        PreparedStatement preparedStatement = connection.prepareStatement(sql)) {
+            preparedStatement.setInt(1, requestId);
+
+            try (ResultSet resultSet = preparedStatement.executeQuery()){
+                Request request = new Request();
+                while (resultSet.next()){
+                    request.setId(resultSet.getInt("id"));
+                    request.setApplicant(getApplicantById(resultSet.getInt("applicant_id")));
+                    request.setOpeningDate(DateFormatter.sqlDateToLocalDate(resultSet.getString("opening_date")));
+                    request.setClosingDate(DateFormatter.sqlDateToLocalDate(resultSet.getString("closing_date")));
+                    request.setDescription(resultSet.getString("description"));
+                }
+                return request;
+            }
+        }catch(SQLException e){
+            throw new DataAccessException("Error list request by id",e);
+        }
+    }
+
     public void editRequest(int requestId, Request request) throws DataAccessException {
         StringBuilder sql = new StringBuilder("UPDATE Request SET ");
         boolean isFirst = true;

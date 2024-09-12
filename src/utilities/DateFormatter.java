@@ -18,7 +18,7 @@ public class DateFormatter {
 
         // Verifica se a string tem 8 caracteres após a remoção dos não numéricos
         if (date.length() != 8) {
-            throw new IllegalArgumentException("Date format should be ddMMyyyy");
+            throw new IllegalArgumentException("Date format should be dd/MM/yyyy");
         }
 
         // Formata a data
@@ -41,6 +41,9 @@ public class DateFormatter {
 
     public static LocalDate sqlDateToLocalDate(String date) {
         DateTimeFormatter pattern = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+        if (date == null || date.isEmpty()) {
+            return null;
+        }
         try {
             return LocalDate.parse(date, pattern);
         } catch (DateTimeParseException e) {

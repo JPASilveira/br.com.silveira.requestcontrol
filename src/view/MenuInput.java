@@ -17,6 +17,9 @@ public class MenuInput {
         while (true){
             try {
                 input = scanner.nextLine();
+                if(input == null || input.isEmpty()){
+                    throw new InputMismatchException();
+                }
                 return switch (input.substring(0,1).trim().toUpperCase()){
                     case "A" -> MenuEnum.APPLICANT;
                     case "R" -> MenuEnum.REQUEST;
@@ -155,6 +158,7 @@ public class MenuInput {
                 return switch (input.substring(0,1).trim().toUpperCase()){
                     case "A" -> RequestEnum.ADD;
                     case "E" -> RequestEnum.EDIT;
+                    case "L" -> RequestEnum.LIST;
                     case "D" -> RequestEnum.DELETE;
                     case "R" -> RequestEnum.RETURN;
                     default -> throw new InputMismatchException();
@@ -195,13 +199,33 @@ public class MenuInput {
                 input = scanner.nextLine();
                 return switch (input.substring(0,1).trim().toUpperCase()){
                     case "A" -> RequestEnum.ALL;
-                    case "N" -> RequestEnum.NAME;
+                    case "I" -> RequestEnum.ID;
                     case "D" -> RequestEnum.DATE;
                     case "R" -> RequestEnum.RETURN;
                     default -> throw new InputMismatchException();
                 };
             }catch (InputMismatchException e){
                 System.out.println("Invalid input, please try again.");
+            }
+        }
+    }
+
+    public static int requestId(){
+        Scanner scanner = new Scanner(System.in);
+        int id;
+        while (true) {
+            try {
+                System.out.println("Please enter request id: ");
+                id = scanner.nextInt();
+                if (id < 0 ){
+                    System.out.println("Invalid input, please try again.");
+                    scanner.next();
+                    continue;
+                }
+                return id;
+            }catch (InputMismatchException e){
+                System.out.println("Invalid input, please try again.");
+                scanner.next();
             }
         }
     }

@@ -45,6 +45,7 @@ public class RequestInput {
         request.setDescription(description);
     }
 
+
     public static void editOpeningDate(Request request) {
         String openingDate;
 

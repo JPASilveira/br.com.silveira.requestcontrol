@@ -31,8 +31,8 @@ public class MenuPrinter {
     }
 
     public static void listRequestMenu(){
-        System.out.println("               LIST               ");
-        System.out.println("(A)ll | (N)ame | (D)ate | (R)eturn");
+        System.out.println("                   LIST                   ");
+        System.out.println("(A)ll | (I)d applicant | (D)ate | (R)eturn");
     }
 
     public static void optionMenu(){
